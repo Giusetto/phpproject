@@ -8,7 +8,13 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <title>Details</title>
     <style>
-    
+        .nav {
+            width: 100%;
+        }
+
+        .divide {
+            /width: 50%;
+        }
     </style>
 </head>
 
@@ -46,7 +52,7 @@
         $res = mysqli_fetch_assoc($result_query);
 
 
-        echo '<div class="nav justify-content-around"><div class="divide">';
+        echo '<div class="nav justify-content-around"><div>';
         echo "<img src='./images/" . $res['poster'] . "' width='400'>" . '</div><br>';
         echo '<div class="movie-info divide">';
         echo "<h2>" .  $res['title'] . "</h2>";
@@ -62,7 +68,7 @@
 
 
         echo "</div>";
-        echo "<div class='edit-details text-right divide'>";
+        echo "<div class='edit-details text-right'>";
         echo "<a href='/edit.php'> Edit </a>" . "<br>";
         echo '</div></div>';
     } else {
