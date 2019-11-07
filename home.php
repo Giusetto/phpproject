@@ -22,7 +22,7 @@
 
         }
 
-        a {
+        a{
             text-decoration: none;
         }
     </style>
@@ -72,7 +72,7 @@
         <div>
             <ul class="nav justify-content-center">
                 <li class="nav-item">
-                    <a class="nav-link active" href="catalogue.php?category=science_fiction">science fiction(<?php echo $scieNum ?>)</a>
+                    <a class="nav-link active" href="catalogue.php?category=sci_fi">science fiction(<?php echo $scieNum ?>)</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="catalogue.php?category=action">action(<?php echo $actionNum ?>)</a>

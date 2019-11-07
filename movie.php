@@ -1,3 +1,7 @@
+<?php
+session_start();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -32,7 +36,6 @@ require_once 'header.html';
     $db_found = mysqli_select_db($connect, 'moviesdb');
 
     $movie_id = $_GET['movie_id'];
-
 
     if ($db_found) {
         echo "<div class='top'>";
@@ -69,17 +72,41 @@ require_once 'header.html';
 
         echo "</div>";
         echo "<div class='edit-details text-right'>";
-        echo "<a href='/edit.php'> Edit </a>" . "<br>";
-        echo '</div></div>';
-    } else {
-        echo 'moviesdb not found!';
-    }
+        echo "<a href='./editmovie.php?editmovie_id=" . $res['movie_id'] . "' > Edit </a><br>";
+           
+        if ($_SESSION) {
+                echo "<select id='user_playlist'>";
+                echo "<option value='' selected disabled hidden>Add to playlist</option>";
+                $conn = mysqli_connect(DB_SERVER, DB_USER, DB_PASSWORD, DB_NAME);
+                $query = "SELECT * FROM playlist WHERE user_id='" . $_SESSION['user_id'] . "' ORDER BY date DESC";
+                $results = mysqli_query($conn, $query);
+                while ($db_record = mysqli_fetch_assoc($results)) {
+                    echo "<option value='".$db_record['playlist_id']."'>".$db_record['name']."</option>";
+                }
+            }
+             echo '</div></div>';
+        };
 
     //closing the connection
     mysqli_close($connect);
     require_once 'footer.html'; 
     ?>
 
+    
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+<script>
+    $(function() {
+            $('#user_playlist').on('change', function(e) {
+                e.preventDefault();
+                
+console.log($(this).val());
+
+                // similar behavior as clicking on a link
+            window.location.href = "http://localhost/php/day_11/phpproject/addmovie.php?playlist_id=" + $(this).val() + "&movie_id=<?php echo $movie_id?>";
+            });
+        });
+
+</script>
 
 </body>
 
