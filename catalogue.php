@@ -1,3 +1,9 @@
+<?php
+session_start();
+//require_once 'menu.html'; 
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -116,8 +122,11 @@
             echo "<br><p>" . substr($res['synopsis'], 0, 100) . '...</p><br>';
             echo "</div>";
             echo "<div class='edit-details text-right divide'>";
-            echo "<a href='./movie.php?movie_id=" . $res['movie_id'] . "' > More details </a>" . "<br>";
-            echo "<a href='/edit.php'> Edit </a>" . "<br>";
+            if ($_SESSION) {
+                echo "add to playlist<br>";
+            };
+            echo "<a href='./movie.php?movie_id=" . $res['movie_id'] . "' > More details </a><br>";
+            echo "<a href='/edit.php'> Edit </a><br>";
             echo '</div></div>';
         }
         echo "</div>";
