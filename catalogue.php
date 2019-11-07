@@ -124,7 +124,7 @@ require_once 'header.html';
             echo "</div>";
             echo "<div class='edit-details text-right divide'>";
             if ($_SESSION) {
-                echo "<a href='#'>add to playlist</a><br>";
+                echo "<a href='#'>Add to playlist</a><br>";
             };
             echo "<a href='./movie.php?movie_id=" . $res['movie_id'] . "' > More details </a><br>";
             echo "<a href='/edit.php'> Edit </a><br>";
