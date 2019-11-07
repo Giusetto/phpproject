@@ -23,16 +23,9 @@ require_once 'header.html';
 </head>
 
 <body>
-    <header>
-        <!--
-    NAV WILL COME HERE
--->
-    </header>
+
 
     <!-- SORTING AND FILTERING-->
-
-    
-
 
 
     <section class="container" id="list">
@@ -54,6 +47,8 @@ require_once 'header.html';
         </select>
 
     </div>
+
+
         <?php
 
         require_once 'database.php';
@@ -105,9 +100,36 @@ require_once 'header.html';
             };
         }
 
+        $user = $_SESSION['user_id'];
 
-        $query = "SELECT * FROM movies $filter $orderby LIMIT $offset, $no_of_records_per_page";
+        $query = "SELECT * FROM movies
+        $filter
+        $orderby 
+        LIMIT $offset, $no_of_records_per_page";
 
+        /* 
+        JOIN movie_playlist ON movies.movie_id = movie_playlist.movie_id
+        JOIN playlist ON movie_playlist.playlist_id = playlist.playlist_id
+        JOIN users ON users.user_id = playlist.user_id
+        WHERE playlist.user_id = $user 
+        */
+
+        //!
+    /*
+    <?php
+    $conn = mysqli_connect(DB_SERVER, DB_USER, DB_PASSWORD, DB_NAME);
+    $query = "SELECT * FROM playlist WHERE user_id='" . $_SESSION['user_id'] . "' ORDER BY date DESC";
+
+    $results = mysqli_query($conn, $query);
+    
+    while ($db_record = mysqli_fetch_assoc($results)) {
+       
+    }
+    mysqli_close($conn);
+    ($conn);
+     ?>   
+*/
+        //!
         //sends an sql request to our db
         $result_query = mysqli_query($connect, $query);
         echo "<div class='container'>";
@@ -123,11 +145,20 @@ require_once 'header.html';
             echo "<br><p>" . substr($res['synopsis'], 0, 100) . '...</p><br>';
             echo "</div>";
             echo "<div class='edit-details text-right divide'>";
-            if ($_SESSION) {
-                echo "<a href='#'>Add to playlist</a><br>";
-            };
+            /*if ($_SESSION) {
+                echo "<select id='user_playlist'>";
+                echo "<option value='' selected disabled hidden>Add to playlist</option>";
+                $conn = mysqli_connect(DB_SERVER, DB_USER, DB_PASSWORD, DB_NAME);
+                $query = "SELECT * FROM playlist WHERE user_id='" . $_SESSION['user_id'] . "' ORDER BY date DESC";
+                $results = mysqli_query($conn, $query);
+                while ($db_record = mysqli_fetch_assoc($results)) {
+                    echo "<option value='".$db_record['name']."'>".$db_record['name']."</option>";
+                }
+                mysqli_close($conn);
+                echo  "</select><br>";
+            };*/
             echo "<a href='./movie.php?movie_id=" . $res['movie_id'] . "' > More details </a><br>";
-            echo "<a href='/edit.php'> Edit </a><br>";
+            echo "<a href='./editmovie.php?editmovie_id=" . $res['movie_id'] . "' > Edit </a><br>";
             echo '</div></div>';
         }
         echo "</div>";
@@ -198,6 +229,9 @@ require_once 'header.html';
                 window.location.href = "http://localhost/php/day_11/phpproject/catalogue.php?category=" + $(this).val();
             });
         });
+
+   
+
     </script>
     <?php
     
