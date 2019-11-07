@@ -7,6 +7,9 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <title>Details</title>
+    <style>
+    
+    </style>
 </head>
 
 <body>
@@ -32,7 +35,10 @@
         echo "</div>";
         echo '<hr>';
 
-        $query = "SELECT * FROM movies WHERE movies.movie_id = " . $movie_id;
+        $query = "SELECT * FROM movies 
+        JOIN actors_movies ON movies.movie_id = actors_movies.movie_id 
+        JOIN actors ON actors.actor_id = actors_movies.actor_id
+        WHERE movies.movie_id = " . $movie_id;
 
         //sends an sql request to our db
         $result_query = mysqli_query($connect, $query);
@@ -47,7 +53,14 @@
         echo $res['date_of_release'] . '<br>';
         echo "<br><p>" . $res['synopsis'] . '</p><br>';
         echo "Category: " . $res['category'] . "<br>";
-        echo "Actors: SOON <br>";
+        //*ACTORS
+
+        echo "<br>Actors:<br>";
+        do {
+            echo $res['name'] . "<br>";
+        } while ($res = mysqli_fetch_assoc($result_query));
+
+
         echo "</div>";
         echo "<div class='edit-details text-right divide'>";
         echo "<a href='/edit.php'> Edit </a>" . "<br>";

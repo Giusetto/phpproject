@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,186 +10,185 @@
 
 
     <style>
-    .divide{
-        width: 33%;
-    }
-
+        .divide {
+            width: 33%;
+        }
     </style>
 </head>
+
 <body>
-<header>
-<!--
+    <header>
+        <!--
     NAV WILL COME HERE
 -->
-</header>
+    </header>
 
-<!-- SORTING AND FILTERING-->
+    <!-- SORTING AND FILTERING-->
 
-<div id="sorting-filtering" class="dropdown">
+    <div id="sorting-filtering" class="dropdown">
 
-<select id="sortingby">
-    <option value="" selected disabled hidden>Sort by:</option>
-  <option value="title">Title</option>
-  <option value="titled">Title descending</option>
-  <option value="datea">Date ascending</option>
-  <option value="dated">Date descending</option>
-</select>
+        <select id="sortingby">
+            <option value="" selected disabled hidden>Sort by:</option>
+            <option value="title">Title</option>
+            <option value="titled">Title descending</option>
+            <option value="datea">Date ascending</option>
+            <option value="dated">Date descending</option>
+        </select>
 
-<select id="filteringby">
-    <option value="" selected disabled hidden>Select a category:</option>
-  <option value="action">Action</option>
-  <option value="comedy">Comedy</option>
-  <option value="scifi">Science Fiction</option>
-</select>
+        <select id="filteringby">
+            <option value="" selected disabled hidden>Select a category:</option>
+            <option value="action">Action</option>
+            <option value="comedy">Comedy</option>
+            <option value="scifi">Science Fiction</option>
+        </select>
 
-</div>
+    </div>
 
 
 
-<section id="list">
-<?php
+    <section id="list">
+        <?php
 
-require_once 'database.php';
-// OPEN A CONNECTION TO THE DATABASE
-$connect = mysqli_connect(DB_SERVER, DB_USER, DB_PASSWORD); //user and password are optional
+        require_once 'database.php';
+        // OPEN A CONNECTION TO THE DATABASE
+        $connect = mysqli_connect(DB_SERVER, DB_USER, DB_PASSWORD); //user and password are optional
 
-//choose the db you want to work on
-$db_found = mysqli_select_db($connect, 'moviesdb');
+        //choose the db you want to work on
+        $db_found = mysqli_select_db($connect, 'moviesdb');
 
-if (isset($_GET['page'])) {
-        $pageno = $_GET['page'];
-    } else {
-        $pageno = 1;
-    }
+        if (isset($_GET['page'])) {
+            $pageno = $_GET['page'];
+        } else {
+            $pageno = 1;
+        }
 
-    $no_of_records_per_page = 3;
-    $offset = ($pageno - 1) * $no_of_records_per_page;
+        $no_of_records_per_page = 3;
+        $offset = ($pageno - 1) * $no_of_records_per_page;
 
-    $total_pages_sql = "SELECT COUNT(*) FROM movies";
-    $result = mysqli_query($connect, $total_pages_sql);
-    $total_rows = mysqli_fetch_array($result)[0];
-    $total_pages = ceil($total_rows / $no_of_records_per_page);
+        $total_pages_sql = "SELECT COUNT(*) FROM movies";
+        $result = mysqli_query($connect, $total_pages_sql);
+        $total_rows = mysqli_fetch_array($result)[0];
+        $total_pages = ceil($total_rows / $no_of_records_per_page);
 
-//* sorting 
+        //* sorting 
 
-$orderby = 'ORDER BY title ASC';
-if(isset($_GET['sort'])){
-		if($_GET['sort'] == 'titled') {
-			$orderby = 'ORDER BY title DESC';
-		} else if($_GET['sort'] == 'datea') {
-			$orderby = 'ORDER BY date_of_release ASC';
-		} else if($_GET['sort'] == 'dated') {
-			$orderby = 'ORDER BY date_of_release DESC';
-        };
-    }
-		//$query = 'SELECT * FROM movies ORDER BY ' . $order;
-		//var_dump($query);
+        $orderby = 'ORDER BY title ASC';
+        if (isset($_GET['sort'])) {
+            if ($_GET['sort'] == 'titled') {
+                $orderby = 'ORDER BY title DESC';
+            } else if ($_GET['sort'] == 'datea') {
+                $orderby = 'ORDER BY date_of_release ASC';
+            } else if ($_GET['sort'] == 'dated') {
+                $orderby = 'ORDER BY date_of_release DESC';
+            };
+        }
+        //$query = 'SELECT * FROM movies ORDER BY ' . $order;
+        //var_dump($query);
 
-  //*filtering 
+        //*filtering 
 
-  $filter = '';
-if(isset($_GET['category'])){
-		if($_GET['category'] == 'action') {
-			$filter = 'WHERE movies.category = "action"';
-		} else if($_GET['category'] == 'comedy') {
-			$filter = 'WHERE movies.category = "comedy"';
-		} else if($_GET['category'] == 'dated') {
-			$filter = 'WHERE movies.category = "science fiction"';
-        };
-    }
-  
-  
-    $query = "SELECT * FROM movies $filter $orderby LIMIT $offset, $no_of_records_per_page";
+        $filter = '';
+        if (isset($_GET['category'])) {
+            if ($_GET['category'] == 'action') {
+                $filter = 'WHERE movies.category = "action"';
+            } else if ($_GET['category'] == 'comedy') {
+                $filter = 'WHERE movies.category = "comedy"';
+            } else if ($_GET['category'] == 'scifi') {
+                $filter = 'WHERE movies.category = "sci_fi"';
+            };
+        }
 
-    //sends an sql request to our db
-    $result_query = mysqli_query($connect, $query);
-echo "<div class='container'>";
-    while ($res = mysqli_fetch_assoc($result_query)) {
-        echo '<hr>';
-        
-        echo '<div class="nav justify-content-between"><div class="divide">';
-        echo "<img src='./images/" . $res['poster'] . "' width='200'>" . '</div><br>';
-        echo '<div class="movie-info divide">';
-        echo "#" . $res['movie_id'] . " ";
-        echo "<h2>" .  $res['title'] . "</h2>";
-        echo $res['date_of_release'] . '<br>';
-        echo "<br><p>" . substr($res['synopsis'], 0, 100) . '...</p><br>';
+
+        $query = "SELECT * FROM movies $filter $orderby LIMIT $offset, $no_of_records_per_page";
+
+        //sends an sql request to our db
+        $result_query = mysqli_query($connect, $query);
+        echo "<div class='container'>";
+        while ($res = mysqli_fetch_assoc($result_query)) {
+            echo '<hr>';
+
+            echo '<div class="nav justify-content-between"><div class="divide">';
+            echo "<img src='./images/" . $res['poster'] . "' width='200'>" . '</div><br>';
+            echo '<div class="movie-info divide">';
+            echo "#" . $res['movie_id'] . " ";
+            echo "<h2>" .  $res['title'] . "</h2>";
+            echo $res['date_of_release'] . '<br>';
+            echo "<br><p>" . substr($res['synopsis'], 0, 100) . '...</p><br>';
+            echo "</div>";
+            echo "<div class='edit-details text-right divide'>";
+            echo "<a href='./movie.php?movie_id=" . $res['movie_id'] . "' > More details </a>" . "<br>";
+            echo "<a href='/edit.php'> Edit </a>" . "<br>";
+            echo '</div></div>';
+        }
         echo "</div>";
-        echo "<div class='edit-details text-right divide'>";      
-        echo "<a href='./movie.php?movie_id=" . $res['movie_id'] . "' > More details </a>" . "<br>";
-        echo "<a href='/edit.php'> Edit </a>" . "<br>";
-        echo '</div></div>';
-    }
-    echo "</div>";
 
 
-//closing the connection
-mysqli_close($connect);
+        //closing the connection
+        mysqli_close($connect);
 
-?>
-</section>
+        ?>
+    </section>
 
-<footer>
-    <nav aria-label="Page navigation example">
-<ul class="pagination justify-content-center">
-            <li class="page-item">
-                <a class="page-link" href="?page=1">First</a></li>
-            <li class="<?php if ($pageno <= 1) {
-                            echo 'disabled';
-                        } ?> page-item">
-                <a href="<?php if ($pageno <= 1) {
-                                echo '#';
-                            } else {
-                                echo "?page=" . ($pageno - 1);
-                                
-                                if (isset($_GET['sort']))
-                                    echo "&sort=" . $_GET['sort'];
+    <footer>
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+                <li class="page-item">
+                    <a class="page-link" href="?page=1">First</a></li>
+                <li class="<?php if ($pageno <= 1) {
+                                echo 'disabled';
+                            } ?> page-item">
+                    <a href="<?php if ($pageno <= 1) {
+                                    echo '#';
+                                } else {
+                                    echo "?page=" . ($pageno - 1);
+
+                                    if (isset($_GET['sort']))
+                                        echo "&sort=" . $_GET['sort'];
                                     //filter category
                                     if (isset($_GET['category']))
-                                    echo "&sort=" . $_GET['category'];
+                                        echo "&sort=" . $_GET['category'];
+                                } ?>" class="page-link">Prev</a>
+                </li>
+                <li class="<?php if ($pageno >= $total_pages) {
+                                echo 'disabled';
+                            } ?> page-item">
+                    <a href="<?php if ($pageno >= $total_pages) {
+                                    echo '#';
+                                } else {
+                                    echo "?page=" . ($pageno + 1);
 
-                            } ?>" class="page-link">Prev</a>
-            </li>
-            <li class="<?php if ($pageno >= $total_pages) {
-                            echo 'disabled';
-                        } ?> page-item">
-                <a href="<?php if ($pageno >= $total_pages) {
-                                echo '#';
-                            } else {
-                                echo "?page=" . ($pageno + 1);
-                                
-                                if (isset($_GET['sort']))
-                                    echo "&sort=" . $_GET['sort'];
+                                    if (isset($_GET['sort']))
+                                        echo "&sort=" . $_GET['sort'];
                                     //filter category
                                     if (isset($_GET['category']))
-                                    echo "&sort=" . $_GET['category'];
-
-                            } ?>" class="page-link"> Next </a>
-            </li>
-            <li class="page-item">
-                <a href="?page=<?php echo $total_pages; ?>" class="page-link">Last</a></li>
-        </ul>
+                                        echo "&sort=" . $_GET['category'];
+                                } ?>" class="page-link"> Next </a>
+                </li>
+                <li class="page-item">
+                    <a href="?page=<?php echo $total_pages; ?>" class="page-link">Last</a></li>
+            </ul>
         </nav>
-</footer>
+    </footer>
 
-<script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
 
-	<script>
-$(function(){
-	$('#sortingby').on('change',function(e){
-		e.preventDefault();
-		// similar behavior as clicking on a link
-		window.location.href = "http://localhost/php/day_11/phpproject/catalogue.php?sort=" + $(this).val();
-	});
-});
+    <script>
+        $(function() {
+            $('#sortingby').on('change', function(e) {
+                e.preventDefault();
+                // similar behavior as clicking on a link
+                window.location.href = "http://localhost/php/day_11/phpproject/catalogue.php?sort=" + $(this).val();
+            });
+        });
 
-$(function(){
-	$('#filteringby').on('change',function(e){
-		e.preventDefault();
-		// similar behavior as clicking on a link
-		window.location.href = "http://localhost/php/day_11/phpproject/catalogue.php?category=" + $(this).val();
-	});
-});
-</script>
+        $(function() {
+            $('#filteringby').on('change', function(e) {
+                e.preventDefault();
+                // similar behavior as clicking on a link
+                window.location.href = "http://localhost/php/day_11/phpproject/catalogue.php?category=" + $(this).val();
+            });
+        });
+    </script>
 </body>
+
 </html>
