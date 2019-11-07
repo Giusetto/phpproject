@@ -44,12 +44,12 @@
         $password = htmlspecialchars($_POST['password']);
         $email = filter_var($email, FILTER_SANITIZE_EMAIL);
         $email = filter_var($email, FILTER_VALIDATE_EMAIL);
-        if ($email && !empty($FirstName) && !empty($LastName) && !empty($password)) {
+        if ($email && !empty($FirstName) && !empty($LastName) && !empty($password) && strlen($password)>7) {
             if (data_chek($email)) {
                 $conn = mysqli_connect(DB_SERVER, DB_USER, DB_PASSWORD, DB_NAME);
                 $query = "INSERT INTO users (Last_Name, email, First_Name, password) VALUES ('" . $LastName . "','" . $email . "', '" . $FirstName . "','" . password_hash($password, PASSWORD_DEFAULT) . "')";
                 $results = mysqli_query($conn, $query);
-                //echo $query;
+                echo "User added"."<br>";
             } else
                 echo "already existing email" . "<br>";
         } else
@@ -64,20 +64,33 @@
 </head>
 
 <body>
+    <main class="container">
 
-
-    <H1>Registration</H1>
-    <form action="#" method="POST">
-        <ul>
-            <li><input type="text" placeholder="First Name" name="First_Name" value='<?php echo $FirstName ?>'></li> <br>
-            <li><input type="text" placeholder="Last Name" name="Last_Name" value='<?php echo $LastName ?>'></li> <br>
-            <li><input type="mail" placeholder="email" name="email" value='<?php echo $email ?>'></li> <br>
-            <li><input type="password" placeholder="password" name="password"></li> <br>
-            <li><input type="submit" name="submit"></li> <br>
-
-        </ul>
-
-
+        <form action="#" method="POST">
+            <H1>Registration</H1>
+            <div class="form-group">
+                <label for="exampleInputEmail1">Email address</label>
+                <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter first name" name="First_Name">
+                
+            </div>
+            <div class="form-group">
+                <label for="exampleInputPassword1">Password</label>
+                <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Enter last name" name="Last_Name">
+            </div>    
+            
+            <div class="form-group">
+                <label for="exampleInputEmail1">Email address</label>
+                <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email" name="email">
+                
+            </div>
+            <div class="form-group">
+                <label for="exampleInputPassword1">Password</label>
+                <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password" name="password">
+            </div>
+            <button type="submit" class="btn btn-primary" name="submit">Submit</button>
+        </form>
+    </main>
+        
 
 
 
