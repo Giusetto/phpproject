@@ -22,7 +22,7 @@
 
 
     <?php
-
+require_once 'header.html'; 
     require_once 'database.php';
 
     // OPEN A CONNECTION TO THE DATABASE
@@ -77,6 +77,7 @@
 
     //closing the connection
     mysqli_close($connect);
+    require_once 'footer.html'; 
     ?>
 
 

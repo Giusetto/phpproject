@@ -1,6 +1,6 @@
 <?php
 session_start();
-//require_once 'menu.html'; 
+require_once 'header.html'; 
 
 ?>
 
@@ -31,8 +31,13 @@ session_start();
 
     <!-- SORTING AND FILTERING-->
 
-    <div id="sorting-filtering" class="dropdown">
+    
 
+
+
+    <section class="container" id="list">
+        <div id="sorting-filtering" class="dropdown">
+        <br>
         <select id="sortingby">
             <option value="" selected disabled hidden>Sort by:</option>
             <option value="title">Title</option>
@@ -49,10 +54,6 @@ session_start();
         </select>
 
     </div>
-
-
-
-    <section id="list">
         <?php
 
         require_once 'database.php';
@@ -123,7 +124,7 @@ session_start();
             echo "</div>";
             echo "<div class='edit-details text-right divide'>";
             if ($_SESSION) {
-                echo "add to playlist<br>";
+                echo "<a href='#'>add to playlist</a><br>";
             };
             echo "<a href='./movie.php?movie_id=" . $res['movie_id'] . "' > More details </a><br>";
             echo "<a href='/edit.php'> Edit </a><br>";
@@ -198,6 +199,10 @@ session_start();
             });
         });
     </script>
+    <?php
+    
+    require_once 'footer.html'; 
+    ?>
 </body>
 
 </html>

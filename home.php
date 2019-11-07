@@ -19,9 +19,10 @@
 
         .card {
             width: 100%;
-            
+
         }
-        a{
+
+        a {
             text-decoration: none;
         }
     </style>
@@ -56,9 +57,8 @@
         <?php $query = "SELECT category, count(*) FROM movies GROUP BY category "; ?>
 
         <?php $result = mysqli_query($connect, $query);
-
         while ($row = mysqli_fetch_assoc($result)) {
-            if ($row['category'] == 'science fiction') {
+            if ($row['category'] == 'sci_fi') {
                 $scieNum = $row['count(*)'];
             }
             if ($row['category'] == 'action') {
@@ -141,7 +141,7 @@
         </div>
         <?php require_once 'footer.html' ?>
     </main>
-    
+
     <script src=" https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous">
     </script>
 
